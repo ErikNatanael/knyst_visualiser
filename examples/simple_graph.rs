@@ -1,4 +1,3 @@
-use std::ptr::read_unaligned;
 
 use color_eyre::Result;
 use knyst::audio_backend::JackBackend;
@@ -26,26 +25,26 @@ fn main() -> Result<()> {
     std::thread::spawn(|| {
         for &freq in [400, 600, 500].iter().cycle() {
             let mut rng = rand::thread_rng();
-            for _ in 0..10 {
-                let freq = (sine().freq(
-                    sine()
-                        .freq(
-                            sine()
-                                .freq(0.01)
-                                .range(0.02, rng.gen_range(0.05..0.3 as Sample)),
-                        )
-                        .range(0.0, 400.),
-                ) * 100.0)
-                    + 440.;
-                // let freq = sine().freq(0.5).range(200.0, 200.0 * 9.0 / 8.0);
-                let node0 = sine();
-                node0.freq(freq);
-                let modulator = sine();
-                modulator.freq(sine().freq(0.09) * -5.0 + 6.0);
-                graph_output(0, (node0 * modulator * 0.025).repeat_outputs(1));
-            }
+            // for _ in 0..10 {
+            //     let freq = (sine().freq(
+            //         sine()
+            //             .freq(
+            //                 sine()
+            //                     .freq(0.01)
+            //                     .range(0.02, rng.gen_range(0.05..0.3 as Sample)),
+            //             )
+            //             .range(0.0, 400.),
+            //     ) * 100.0)
+            //         + 440.;
+            //     // let freq = sine().freq(0.5).range(200.0, 200.0 * 9.0 / 8.0);
+            //     let node0 = sine();
+            //     node0.freq(freq);
+            //     let modulator = sine();
+            //     modulator.freq(sine().freq(0.09) * -5.0 + 6.0);
+            //     graph_output(0, (node0 * modulator * 0.025).repeat_outputs(1));
+            // }
             // new graph
-            commands().init_local_graph(commands().default_graph_settings());
+            knyst().init_local_graph(knyst().default_graph_settings());
             let sig = sine().freq(freq as f32).out("sig") * 0.25;
             let env = Envelope {
                 points: vec![(1.0, 0.005), (0.0, 0.5)],
@@ -57,7 +56,7 @@ fn main() -> Result<()> {
 
             graph_output(0, sig.repeat_outputs(1));
             // push graph to sphere
-            let graph = commands().upload_local_graph();
+            let graph = knyst().upload_local_graph();
             let sig = graph + static_sample_delay(48 * 500).input(graph);
 
             graph_output(0, sig.repeat_outputs(1));
