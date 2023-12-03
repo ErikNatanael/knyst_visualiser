@@ -15,7 +15,7 @@ opt-level = 3
 [dependencies]
 bevy = "0.12.0"
 knyst = { path = "/home/erik/code/rust/audio/knyst/knyst" }
+rand = "0.8.5"
 
 [dev-dependencies]
 color-eyre = "0.6.2"
-rand = "0.8.5"

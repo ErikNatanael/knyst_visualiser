@@ -1,4 +1,3 @@
-
 use color_eyre::Result;
 use knyst::audio_backend::JackBackend;
 use knyst::controller::print_error_handler;
@@ -26,22 +25,24 @@ fn main() -> Result<()> {
         for &freq in [400, 600, 500].iter().cycle() {
             let mut rng = rand::thread_rng();
             // for _ in 0..10 {
-            //     let freq = (sine().freq(
-            //         sine()
-            //             .freq(
-            //                 sine()
-            //                     .freq(0.01)
-            //                     .range(0.02, rng.gen_range(0.05..0.3 as Sample)),
-            //             )
-            //             .range(0.0, 400.),
-            //     ) * 100.0)
-            //         + 440.;
-            //     // let freq = sine().freq(0.5).range(200.0, 200.0 * 9.0 / 8.0);
-            //     let node0 = sine();
-            //     node0.freq(freq);
-            //     let modulator = sine();
-            //     modulator.freq(sine().freq(0.09) * -5.0 + 6.0);
-            //     graph_output(0, (node0 * modulator * 0.025).repeat_outputs(1));
+            {
+                let freq = (sine().freq(
+                    sine()
+                        .freq(
+                            sine()
+                                .freq(0.01)
+                                .range(0.02, rng.gen_range(0.05..0.3 as Sample)),
+                        )
+                        .range(0.0, 400.),
+                ) * 100.0)
+                    + 440.;
+                // let freq = sine().freq(0.5).range(200.0, 200.0 * 9.0 / 8.0);
+                let node0 = sine();
+                node0.freq(freq);
+                let modulator = sine();
+                modulator.freq(sine().freq(0.09) * -5.0 + 6.0);
+                graph_output(0, (node0 * modulator * 0.025).repeat_outputs(1));
+            }
             // }
             // new graph
             knyst().init_local_graph(knyst().default_graph_settings());
